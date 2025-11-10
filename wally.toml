@@ -1,0 +1,29 @@
+[package]
+name = "kazushikojima/roblox"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+rewire = "sayhisam1/rewire@0.3.0"
+moonlite = "maximumadhd/moonlite@0.9.0"
+fusion = "elttob/fusion@0.3.0"
+# プレイヤーのセーブデータ管理（Sharedパッケージではないため、手動で追加が必要）
+# profileservice = "alreadypro/profileservice@1.0.4"
+# サーバーとクライアント間のデータ同期
+replica = "ayrezrblx/replica@0.1.9"
+# 非同期処理のチェーン化
+promise = "evaera/promise@4.0.0"
+# イベントパラメータの参照渡しと高速化
+fastsignal = "lucasmzreal/fastsignal@10.4.0"
+# 各種ユーティリティ関数
+rbxutils = "raphtalia/rbxutils@1.0.0"
+# 空間範囲の管理と検出
+zoneplus = "mattschrubb/zoneplus@3.2.0"
+# リソース管理とクリーンアップ
+janitor = "howmanysmall/janitor@1.10.0"
+trove = "sleitnick/trove@1.0.0"
+
+[server-dependencies]
+# プレイヤーのセーブデータ管理（サーバー側専用）
+profilestore = "lm-loleris/profilestore@1.0.3"

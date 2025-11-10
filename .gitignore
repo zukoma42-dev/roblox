@@ -47,3 +47,12 @@ build/
 *.temp
 .cache/
 
+# Wally
+Packages/
+ServerPackages/
+wally.lock
+
+# Rojo
+*.rbxlx
+*.rbxl
+
