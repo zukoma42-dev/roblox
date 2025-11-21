@@ -10,6 +10,8 @@ local TransformationUIController = Knit.CreateController({
 
 function TransformationUIController:KnitStart()
 	local TransformationService = Knit.GetService("TransformationService")
+	local DiscoveryService = Knit.GetService("DiscoveryService")
+	
 	local player = Players.LocalPlayer
 	local playerGui = player:WaitForChild("PlayerGui")
 
@@ -21,13 +23,13 @@ function TransformationUIController:KnitStart()
 
 	-- Create Frame
 	local frame = Instance.new("Frame")
-	frame.Size = UDim2.new(0, 220, 0, 300) -- Increased height for list
+	frame.Size = UDim2.new(0, 220, 0, 300)
 	frame.Position = UDim2.new(0, 20, 0.5, -150)
 	frame.BackgroundTransparency = 0.5
 	frame.BackgroundColor3 = Color3.new(0, 0, 0)
 	frame.Parent = screenGui
 	
-	-- Add UIListLayout for automatic arrangement
+	-- Add UIListLayout
 	local listLayout = Instance.new("UIListLayout")
 	listLayout.Parent = frame
 	listLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -41,26 +43,77 @@ function TransformationUIController:KnitStart()
 	padding.PaddingTop = UDim.new(0, 10)
 	padding.PaddingBottom = UDim.new(0, 10)
 
-	-- Generate Buttons dynamically
+	-- Store buttons for updates
+	self.buttons = {}
+
+	-- Initial Fetch
+	DiscoveryService:GetDiscoveredItems():andThen(function(discoveredItems)
+		self:GenerateButtons(frame, TransformationService, discoveredItems)
+	end)
+	
+	-- Listen for new discoveries
+	DiscoveryService.ItemDiscovered:Connect(function(itemId)
+		self:UpdateDiscoveryStatus(itemId)
+	end)
+end
+
+function TransformationUIController:GenerateButtons(parent, service, discoveredItems)
 	local sortedTransformations = {}
 	for _, config in pairs(TransformationConstants.TRANSFORMATIONS) do
 		table.insert(sortedTransformations, config)
 	end
 	
-	-- Sort by DisplayName or Id to ensure consistent order
 	table.sort(sortedTransformations, function(a, b)
 		return a.DisplayName < b.DisplayName
 	end)
 
 	for _, config in ipairs(sortedTransformations) do
 		local btn = Instance.new("TextButton")
-		btn.Size = UDim2.new(0.9, 0, 0, 40) -- Fixed height per button
-		btn.Text = "Transform: " .. config.DisplayName
-		btn.Parent = frame
+		btn.Size = UDim2.new(0.9, 0, 0, 40)
+		btn.Parent = parent
 		
 		btn.MouseButton1Click:Connect(function()
-			TransformationService:RequestTransform(config.Id)
+			if self.buttons[config.Id].IsDiscovered then
+				service:RequestTransform(config.Id)
+			end
 		end)
+		
+		self.buttons[config.Id] = {
+			Instance = btn,
+			Config = config,
+			IsDiscovered = false
+		}
+		
+		-- Initial State Update
+		local isDiscovered = discoveredItems[config.Id] == true
+		self:SetButtonState(config.Id, isDiscovered)
+	end
+end
+
+function TransformationUIController:UpdateDiscoveryStatus(itemId)
+	if self.buttons[itemId] then
+		self:SetButtonState(itemId, true)
+	end
+end
+
+function TransformationUIController:SetButtonState(itemId, isDiscovered)
+	local btnData = self.buttons[itemId]
+	if not btnData then return end
+	
+	btnData.IsDiscovered = isDiscovered
+	local btn = btnData.Instance
+	local config = btnData.Config
+	
+	if isDiscovered then
+		btn.Text = "Transform: " .. config.DisplayName
+		btn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		btn.TextColor3 = Color3.fromRGB(0, 0, 0)
+		btn.AutoButtonColor = true
+	else
+		btn.Text = "???"
+		btn.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+		btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+		btn.AutoButtonColor = false
 	end
 end
 
