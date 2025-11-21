@@ -13,6 +13,7 @@ local TransformationService = Knit.CreateService({
 
 function TransformationService:KnitStart()
 	print("TransformationService Started")
+	self.EffectsService = Knit.GetService("EffectsService")
 end
 
 function TransformationService:KnitInit()
@@ -39,6 +40,11 @@ function TransformationService:Transform(player, transformationId)
 	if not humanoid or not rootPart then return end
 
 	print(player.Name .. " transforming into " .. config.DisplayName)
+	
+	-- Play Effect
+	if self.EffectsService then
+		self.EffectsService:PlayEffect("TransformationPoof", rootPart.Position)
+	end
 	
 	self.ActiveTransformations[player] = {
 		Id = transformationId,
@@ -331,6 +337,11 @@ function TransformationService:Restore(player)
 	end
 	
 	self.ActiveTransformations[player] = nil
+	
+	-- Play Effect
+	if self.EffectsService and character and character.PrimaryPart then
+		self.EffectsService:PlayEffect("TransformationPoof", character.PrimaryPart.Position)
+	end
 end
 
 function TransformationService.Client:RequestTransform(player, transformationId)

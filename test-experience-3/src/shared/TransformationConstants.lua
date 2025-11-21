@@ -59,6 +59,16 @@ local TransformationConstants = {
 			AutoGround = true,
 			Rotation = Vector3.new(0, 0, 0),
 		},
+		Cat = {
+			Id = "Cat",
+			Type = "Object", -- Assuming Object for now, unless user has a rigged character
+			Duration = 60,
+			Cooldown = 10,
+			DisplayName = "Cat",
+			Description = {},
+			AutoGround = true,
+			Rotation = Vector3.new(0, 0, 0),
+		},
 	},
 }
 

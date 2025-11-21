@@ -3,9 +3,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Knit = require(ReplicatedStorage.Packages.Knit)
 local ProfileService = require(ReplicatedStorage.Packages.ProfileService)
 
-local PROFILE_KEY = "PlayerData_v1"
+local PROFILE_KEY = "PlayerData_v2" -- Bump version for schema change
 local PROFILE_TEMPLATE = {
 	DiscoveredItems = {},
+	Money = 0,
 }
 
 local DataService = Knit.CreateService {
@@ -85,6 +86,32 @@ function DataService:AddDiscoveredItem(player, itemId)
 		end
 	end
 	return false
+end
+
+function DataService:GetMoney(player)
+	local profile = self:GetProfile(player)
+	if profile then
+		return profile.Data.Money or 0
+	end
+	return 0
+end
+
+function DataService:SetMoney(player, amount)
+	local profile = self:GetProfile(player)
+	if profile then
+		profile.Data.Money = amount
+		return true
+	end
+	return false
+end
+
+function DataService:AddMoney(player, amount)
+	local profile = self:GetProfile(player)
+	if profile then
+		profile.Data.Money = (profile.Data.Money or 0) + amount
+		return profile.Data.Money
+	end
+	return nil
 end
 
 return DataService

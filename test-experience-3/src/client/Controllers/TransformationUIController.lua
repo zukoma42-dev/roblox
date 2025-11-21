@@ -21,13 +21,34 @@ function TransformationUIController:KnitStart()
 	screenGui.ResetOnSpawn = false
 	screenGui.Parent = playerGui
 
-	-- Create Frame
-	local frame = Instance.new("Frame")
-	frame.Size = UDim2.new(0, 220, 0, 300)
+	-- Create Main Frame (Hidden by default)
+	local frame = Instance.new("ScrollingFrame")
+	frame.Name = "TransformationList"
+	frame.Size = UDim2.new(0, 200, 0, 300)
 	frame.Position = UDim2.new(0, 20, 0.5, -150)
-	frame.BackgroundTransparency = 0.5
-	frame.BackgroundColor3 = Color3.new(0, 0, 0)
+	frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	frame.BorderSizePixel = 0
+	frame.Visible = false -- Hidden initially
 	frame.Parent = screenGui
+	
+	-- Create Toggle Button
+	local toggleBtn = Instance.new("TextButton")
+	toggleBtn.Name = "ToggleDiscovery"
+	toggleBtn.Size = UDim2.new(0, 100, 0, 40)
+	toggleBtn.Position = UDim2.new(0, 20, 1, -60) -- Bottom Left
+	toggleBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+	toggleBtn.Text = "Discovery"
+	toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+	toggleBtn.Font = Enum.Font.GothamBold
+	toggleBtn.Parent = screenGui
+	
+	local btnCorner = Instance.new("UICorner")
+	btnCorner.CornerRadius = UDim.new(0, 8)
+	btnCorner.Parent = toggleBtn
+	
+	toggleBtn.MouseButton1Click:Connect(function()
+		frame.Visible = not frame.Visible
+	end)
 	
 	-- Add UIListLayout
 	local listLayout = Instance.new("UIListLayout")

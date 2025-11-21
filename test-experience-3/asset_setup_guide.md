@@ -92,3 +92,20 @@ ReplicatedStorage
 3. ログ（Output）を確認します：
     - 成功: `[TransformationService] Found real asset for: Warrior`
     - 失敗: `[TransformationService] Real asset not found...` （この場合、モデル名や場所を確認してください）
+
+## 5. 効果音（Audio）の探し方
+
+Robloxで使用できる効果音は **Toolbox** から探すことができます。
+
+1.  **Toolboxを開く**:
+    - [View] タブ -> [Toolbox] をクリックします。
+2.  **Audioタブを選択**:
+    - Toolboxの上部にあるドロップダウンメニュー（デフォルトは "Models"）をクリックし、**[Audio]** を選択します。
+    - さらにその横のメニューで **[Sound Effect]** を選ぶと効果音に絞り込めます。
+3.  **検索**:
+    - 検索バーにキーワード（例: "Poof", "Sparkle", "Magic", "Impact"）を入力して検索します。
+4.  **試聴**:
+    - スピーカーアイコンをクリックすると試聴できます。
+5.  **IDの取得**:
+    - 使いたい音が見つかったら、そのアセットを右クリックして **[Copy Asset ID]** を選択します。
+    - コピーしたID（数字）を `EffectsConstants.lua` に貼り付けて使用します（`rbxassetid://` の後に数字を貼り付け）。
